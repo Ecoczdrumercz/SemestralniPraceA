@@ -15,7 +15,15 @@ import java.util.Iterator;
  */
 public class SpravaTerminu implements ISpravaTerminu {
 
-    AbstrDoubleList<Termin> seznamTerminu;
+    private AbstrDoubleList<Termin> seznamTerminu;
+
+    public SpravaTerminu() {
+        this.seznamTerminu = new AbstrDoubleList<>();
+    }
+
+    public AbstrDoubleList<Termin> getSeznamTerminu() {
+        return seznamTerminu;
+    }
 
     @Override
     public void vlozTermin(Termin termin, enumPozice pozice) {
@@ -41,31 +49,100 @@ public class SpravaTerminu implements ISpravaTerminu {
 
     @Override
     public void vlozTermin(Termin termin) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (jeTerminVolny(termin.dStart, termin.dEnd, termin.tStart, termin.tEnd)) {
+            if (getSeznamTerminu().jePrazdny()) {
+                seznamTerminu.vlozPrvni(termin);
+            } else {
+                if (seznamTerminu.zpristupniPrvni().tStart.isAfter(termin.tEnd) || seznamTerminu.zpristupniPrvni().tStart.equals(termin.tEnd)) {
+                    seznamTerminu.vlozPrvni(termin);
+                } 
+                else if(seznamTerminu.zpristupniPosledni().tEnd.isBefore(termin.tStart) || seznamTerminu.zpristupniPosledni().tEnd.equals(termin.tStart)){
+                    seznamTerminu.vlozPosledni(termin);
+                }
+                else {
+                    seznamTerminu.vlozNaslednika(termin);
+                }
+
+            }
+        } else {
+            System.out.println("Nelze pridat termin");
+        }
     }
 
     @Override
     public Termin zpristupniTermin(enumPozice pozice) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!seznamTerminu.jePrazdny()) {
+            switch (pozice) {
+                case PRVNI:
+                    return seznamTerminu.zpristupniPrvni();
+                case POSLEDNI:
+                    return seznamTerminu.zpristupniPosledni();
+                case PREDCHUDCE:
+                    return seznamTerminu.zpristupniPredchudce();
+                case NASLEDNIK:
+                    return seznamTerminu.zpristupniNaslednika();
+                case AKTUALNI:
+                    return seznamTerminu.zpristupniAktualni();
+                default:
+                    throw new AssertionError();
+            }
+        } else {
+            throw new AssertionError();
+        }
     }
 
     @Override
     public Termin odeberTermin(enumPozice pozice) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!seznamTerminu.jePrazdny()) {
+            switch (pozice) {
+                case PRVNI:
+                    return seznamTerminu.odeberPrvni();
+                case POSLEDNI:
+                    return seznamTerminu.odeberPosledni();
+                case PREDCHUDCE:
+                    return seznamTerminu.odeberPredchudce();
+                case NASLEDNIK:
+                    return seznamTerminu.odeberNaslednika();
+                case AKTUALNI:
+                    return seznamTerminu.odeberAktualni();
+                default:
+                    throw new AssertionError();
+            }
+        } else {
+            throw new AssertionError();
+        }
     }
 
     @Override
     public Boolean jeTerminVolny(LocalDate dStart, LocalDate dEnd, LocalTime tStart, LocalTime tEnd) {
         if (seznamTerminu.jePrazdny()) {
             return true;
-        } else {
-            while (seznamTerminu.iterator().hasNext()) {
-                if () {
-                    seznamTerminu.iterator().next();
+        } 
+        else if(dStart.isAfter(seznamTerminu.zpristupniPosledni().dEnd)){  // jeste kontrola casu a to same na prvni polozku
+                    return true;
                 }
-            }
-        }
+        else {
+            Iterator<Termin> it = seznamTerminu.iterator();
+            while (it.hasNext()) { // dokud ma dalsi prvky
+                Termin t = it.next();
 
+                
+                
+                if (dEnd.isBefore(t.dStart)) { // pokud je konec noveho terminu pred zacatkem terminu v seznamu, tak mohu vratit true
+                    return true;
+                } else { // v tento den uz je termin, tak zkontroluj cas a kontroluj terminy dokud konec noveho terminu je pred zacatek terminu
+                    if (!tEnd.isBefore(t.tStart) && !tStart.isAfter(t.tEnd) && !tEnd.equals(t.tStart) && !tStart.equals(t.tEnd)) {
+                        return false;
+                    }
+                }
+
+            }
+//            if (!dEnd.isBefore(t.dEnd) && ((!tStart.equals(t.tEnd)) || !tEnd.equals(t.tStart)) // !tStart.isAfter // !tEnd.isBefore
+//                    || dStart.isEqual(t.dEnd) && (!tStart.equals(t.tEnd) || !tEnd.equals(t.tStart))) {
+//                return false;
+//            }
+        }
+        return true;
     }
 
     @Override
@@ -85,7 +162,9 @@ public class SpravaTerminu implements ISpravaTerminu {
 
     @Override
     public void generuj(int pocet) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (int i = 0; i < pocet - 1; i++) {
+            vlozTermin(generujTermin(LocalDate.MAX, LocalDate.MIN));
+        }
     }
 
     @Override

@@ -10,5 +10,5 @@ package semestralnipracea;
  * @author DanielP
  */
 public enum enumPozice {
-    PRVNI, POSLEDNI, PREDCHUDCE, NASLEDNIK
+    PRVNI, POSLEDNI, PREDCHUDCE, NASLEDNIK, AKTUALNI
 }

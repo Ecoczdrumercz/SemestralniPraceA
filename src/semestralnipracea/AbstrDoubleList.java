@@ -51,19 +51,16 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
 
     @Override
     public boolean jePrazdny() {
-        if (pocetPrvku == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return pocetPrvku == 0;
     }
 
     @Override
     public void vlozPrvni(T data) {
-        if (jePrazdny() == true) {
+        if (jePrazdny()) {
             Prvek<T> prvek = new Prvek<>(null, null, data);
             prvni = prvek;
             posledni = prvek;
+            aktualni = prvek;
             pocetPrvku++;
         } else {
             Prvek<T> prvek = new Prvek<>(null, prvni, data);
@@ -75,10 +72,11 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
 
     @Override
     public void vlozPosledni(T data) {
-        if (jePrazdny() == true) {
+        if (jePrazdny()) {
             Prvek<T> prvek = new Prvek<>(null, null, data);
             posledni = prvek;
             prvni = prvek;
+            aktualni = prvek;
             pocetPrvku++;
         } else {
             Prvek<T> prvek = new Prvek<>(posledni, null, data);
@@ -267,14 +265,14 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
     {
         return new Iterator<T>()
         {
-            Prvek<T> index = prvni;
+            Prvek<T> i = prvni;
             Prvek<T> predchoziIndex = null;
             Prvek<T> aktualniIndex = null;
 
             @Override
             public boolean hasNext()
             {
-                return index != null;
+                return i != null;
             }
 
             @Override
@@ -282,10 +280,10 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
             {
                 if (hasNext())
                 {
-                    T data = index.zaznam;
+                    T data = i.zaznam;
                     predchoziIndex = aktualniIndex;
-                    aktualniIndex = index;
-                    index = index.naslednik;
+                    aktualniIndex = i;
+                    i = i.naslednik;
                     return data;
                 }
                 throw new NoSuchElementException();
