@@ -6,8 +6,11 @@
 package semestralnipracea;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import javafx.util.converter.LocalDateTimeStringConverter;
 
 /**
  *
@@ -53,35 +56,38 @@ public class SpravaTerminu implements ISpravaTerminu {
             if (getSeznamTerminu().jePrazdny()) {
                 seznamTerminu.vlozPrvni(termin);
             } else {
-                if (termin.dStart.isBefore(seznamTerminu.zpristupniPrvni().dStart) || termin.dStart.isEqual(seznamTerminu.zpristupniPrvni().dStart)) {
-                    if ((termin.tEnd.equals(seznamTerminu.zpristupniPrvni().tStart)
-                            || termin.tEnd.isBefore(seznamTerminu.zpristupniPrvni().tStart))) {
-                        seznamTerminu.vlozPrvni(termin);
-                    }
-                } else if (termin.dStart.isAfter(seznamTerminu.zpristupniPosledni().dEnd) // rozdelit podminku na dve 
-                        || termin.dStart.isEqual(seznamTerminu.zpristupniPosledni().dEnd)
-                        || seznamTerminu.zpristupniPosledni().dStart.isBefore(termin.dStart)) {
-                    if (seznamTerminu.zpristupniPosledni().tEnd.equals(termin.tStart)
-                            || seznamTerminu.zpristupniPosledni().tEnd.isAfter(termin.tStart)) { // tohle me jebe do prdele
-                        seznamTerminu.vlozPosledni(termin);
-                    }
-                } else {                                                        // iterator, dokud zacatek data nebude rovno stejnemu datu terminu a zaroven konec musi se rovnat startu 
-                    Iterator<Termin> it = seznamTerminu.iterator();
-                    Termin t = it.next();
-                    while (t.dStart.isEqual(termin.dStart) || termin.dStart.isBefore(t.dStart)) {   // tady je chyba na posledni termin + otestovat jine data pro prvni a posledni terminy
-                        if (t.tEnd.equals(termin.tStart)) {
-                            seznamTerminu.vlozPredchudce(termin);
-                            break;
-                        }
-                        if (t.tStart.equals(termin.tEnd)) {
-                            seznamTerminu.vlozNaslednika(termin);
-                            break;
-                        }
-                        it.next();
-                    }
-                    // (pokud vsechno splneno, vloz predchudce, protoze aktualni je prvek, ktere kontroluji)
-                }
+                if (termin.dStart.isBefore(seznamTerminu.zpristupniPrvni().dStart) || (termin.dStart.isEqual(seznamTerminu.zpristupniPrvni().dStart) && termin.tEnd.equals(seznamTerminu.zpristupniPrvni().tStart)
+                        || termin.tEnd.isBefore(seznamTerminu.zpristupniPrvni().tStart))) {
+                    seznamTerminu.vlozPrvni(termin);
+                } else if (termin.dStart.isAfter(seznamTerminu.zpristupniPosledni().dStart)
+                        || termin.dStart.isEqual(seznamTerminu.zpristupniPosledni().dStart)
+                        && (seznamTerminu.zpristupniPosledni().tEnd.equals(termin.tStart)
+                        || seznamTerminu.zpristupniPosledni().tEnd.isBefore(termin.tStart))) {
 
+                    seznamTerminu.vlozPosledni(termin);
+                } else {
+                    Iterator<Termin> it = seznamTerminu.iterator();
+
+                    while (it.hasNext()) {
+                        Termin t = it.next();
+
+                        if (termin.dStart.isBefore(t.dStart) || termin.dStart.equals(t.dStart)) {
+                            if (termin.tStart.equals(t.tEnd)) {
+                                seznamTerminu.vlozNaslednika(termin);
+                            }
+                            if (termin.tEnd.equals(t.tStart)) {
+                                seznamTerminu.vlozPredchudce(termin);
+                                break;
+                            }
+
+                            if (termin.tEnd.equals(t.tStart) || termin.tStart.isAfter(t.tEnd)) {
+                                seznamTerminu.vlozNaslednika(termin);
+                                break;
+                            }
+                        }
+                        System.out.println("konec prvku ");
+                    }
+                }
             }
         } else {
             System.out.println("Nelze pridat termin");
@@ -136,33 +142,18 @@ public class SpravaTerminu implements ISpravaTerminu {
     public Boolean jeTerminVolny(LocalDate dStart, LocalDate dEnd, LocalTime tStart, LocalTime tEnd) {
         if (seznamTerminu.jePrazdny()) {
             return true;
-        } else if (dStart.isAfter(seznamTerminu.zpristupniPosledni().dEnd)
-                || dStart.isEqual(seznamTerminu.zpristupniPosledni().dEnd)
-                && seznamTerminu.zpristupniPosledni().tEnd.equals(tStart)
-                || seznamTerminu.zpristupniPosledni().tEnd.isBefore(tStart)) {  // jeste kontrola casu a to same na prvni polozku
-            return true;
-        } else if (dEnd.isBefore(seznamTerminu.zpristupniPrvni().dStart)
-                || dEnd.isEqual(seznamTerminu.zpristupniPrvni().dStart)
-                && (tEnd.equals(seznamTerminu.zpristupniPrvni().tStart)
-                || tEnd.isBefore(seznamTerminu.zpristupniPrvni().tStart))) {
-            return true;
-
         } else {
             Iterator<Termin> it = seznamTerminu.iterator();
-            while (it.hasNext()) { // dokud ma dalsi prvky
+            while (it.hasNext()) {
                 Termin t = it.next();
-                // v tento den uz je termin, tak zkontroluj cas a kontroluj terminy dokud konec noveho terminu je pred zacatek terminu
-                if (!t.dStart.isBefore(dEnd) && !t.dStart.equals(dEnd)) {       //do doby, kdy termin je mensi nebo rovno datu, jinak return true
+
+                if (!t.dStart.isBefore(dEnd) && !t.dStart.equals(dEnd)) {
                     return true;
                 }
                 if ((t.dEnd.equals(dStart) || t.dEnd.isAfter(dStart)) && !tEnd.isBefore(t.tStart) && !tStart.isAfter(t.tEnd) && !tEnd.equals(t.tStart) && !tStart.equals(t.tEnd)) {
                     return false;
                 }
             }
-//            if (!dEnd.isBefore(t.dEnd) && ((!tStart.equals(t.tEnd)) || !tEnd.equals(t.tStart)) // !tStart.isAfter // !tEnd.isBefore
-//                    || dStart.isEqual(t.dEnd) && (!tStart.equals(t.tEnd) || !tEnd.equals(t.tStart))) {
-//                return false;
-//            }
         }
         return true;
     }
@@ -203,5 +194,4 @@ public class SpravaTerminu implements ISpravaTerminu {
     public void zrus() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }
