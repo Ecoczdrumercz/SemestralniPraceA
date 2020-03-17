@@ -60,7 +60,7 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
             Prvek<T> prvek = new Prvek<>(null, null, data);
             prvni = prvek;
             posledni = prvek;
-            aktualni = prvek;
+          //  aktualni = prvek;
             pocetPrvku++;
         } else {
             Prvek<T> prvek = new Prvek<>(null, prvni, data);
@@ -76,7 +76,7 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
             Prvek<T> prvek = new Prvek<>(null, null, data);
             posledni = prvek;
             prvni = prvek;
-            aktualni = prvek;
+          //  aktualni = prvek;
             pocetPrvku++;
         } else {
             Prvek<T> prvek = new Prvek<>(posledni, null, data);
@@ -266,8 +266,8 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
         return new Iterator<T>()
         {
             Prvek<T> i = prvni;
-            Prvek<T> predchoziIndex = null;
-            Prvek<T> aktualniIndex = null;
+            Prvek<T> predchoziI = null;
+            Prvek<T> aktualniI = null;
 
             @Override
             public boolean hasNext()
@@ -281,8 +281,8 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
                 if (hasNext())
                 {
                     T data = i.zaznam;
-                    predchoziIndex = aktualniIndex;
-                    aktualniIndex = i;
+                    predchoziI = aktualniI;
+                    aktualniI = i;
                     i = i.naslednik;
                     return data;
                 }

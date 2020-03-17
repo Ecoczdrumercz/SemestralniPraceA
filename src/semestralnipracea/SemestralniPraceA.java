@@ -36,13 +36,9 @@ public class SemestralniPraceA {
         
         
 
-        for (Termin t : list.getSeznamTerminu()) {
-            System.out.println(t);
-        }
-        Iterator<Termin> it = list.iterator();
-        while(it.hasNext()){
-            System.out.println(it.next());
-        }
+//        for (Termin t : list.getSeznamTerminu()) {
+//            System.out.println(t);
+//        }
         
         StringBuilder s = new StringBuilder();
         Boolean [][] volnecase = list.volneCasy(LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-29"));

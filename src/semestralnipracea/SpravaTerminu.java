@@ -9,7 +9,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import javafx.util.converter.LocalDateTimeStringConverter;
 
 /**
@@ -66,31 +69,11 @@ public class SpravaTerminu implements ISpravaTerminu {
 
                     seznamTerminu.vlozPosledni(termin);
                 } else {
-                    Iterator<Termin> it = seznamTerminu.iterator();
-
-                    while (it.hasNext()) {
-                        Termin t = it.next();
-
-                        if (termin.dStart.isBefore(t.dStart) || termin.dStart.equals(t.dStart)) {
-                            if (termin.tStart.equals(t.tEnd)) {
-                                seznamTerminu.vlozNaslednika(termin);
-                            }
-                            if (termin.tEnd.equals(t.tStart)) {
-                                seznamTerminu.vlozPredchudce(termin);
-                                break;
-                            }
-
-                            if (termin.tEnd.equals(t.tStart) || termin.tStart.isAfter(t.tEnd)) {
-                                seznamTerminu.vlozNaslednika(termin);
-                                break;
-                            }
-                        }
-                        System.out.println("konec prvku ");
-                    }
+                    seznamTerminu.zpristupniPosledni();
+                    seznamTerminu.vlozPredchudce(termin);               
                 }
             }
         } else {
-            System.out.println("Nelze pridat termin");
         }
     }
 
@@ -159,13 +142,43 @@ public class SpravaTerminu implements ISpravaTerminu {
     }
 
     @Override
-    public Iterator iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public Boolean[][] volneCasy(LocalDate dStart, LocalDate dEnd) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        final int POCET_DNU = (int) ChronoUnit.DAYS.between(dStart, dEnd);
+        final int POCET_HODIN = 8;  //
+        Boolean[][] volny = new Boolean[POCET_DNU][POCET_HODIN];
+        for (Boolean[] booleans : volny) {
+            Arrays.fill(booleans, Boolean.TRUE);
+        }
+        
+        if (seznamTerminu.jePrazdny()) {
+            return volny;
+        } else {
+
+            Iterator<Termin> iter = seznamTerminu.iterator();
+            while (iter.hasNext()) {
+                Termin t = iter.next();
+                System.out.println(t);
+                if (t.dStart.isAfter(dStart) || dStart.isEqual(t.dStart)) {      // je v rozmezi intervalu nebo na pocatku
+                    
+                    int startIndex = (int) ChronoUnit.DAYS.between(dStart, t.dStart);
+                    int konec = (int) ChronoUnit.DAYS.between(dStart, dEnd);
+                    int indexOdHodin = t.tStart.getHour() - POCET_HODIN;
+                    int indexDoHodin = t.tEnd.getHour() - POCET_HODIN;
+                    
+                    if(t.dEnd.isBefore(dEnd)){
+                        konec = (int) ChronoUnit.DAYS.between(dStart, t.dEnd); 
+                    }
+                    
+                    for (int x = startIndex; x < konec; x++) {
+                        for (int y = indexOdHodin; y < indexDoHodin; y++) {
+                            volny[x][y] = false;
+                        }
+                    }
+                }
+            }
+        return volny;
+        }
     }
 
     @Override
@@ -176,22 +189,27 @@ public class SpravaTerminu implements ISpravaTerminu {
     @Override
     public void generuj(int pocet) {
         for (int i = 0; i < pocet - 1; i++) {
-            vlozTermin(generujTermin(LocalDate.MAX, LocalDate.MIN));
+            vlozTermin(generujTermin(LocalDate.parse("2020-03-14"), LocalDate.parse("2020-04-14")));
         }
     }
 
     @Override
     public void uloz() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // uloz do souboru
     }
 
     @Override
     public void nacti() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // nacti ze souboru pravdepodobne
     }
 
     @Override
     public void zrus() {
+        seznamTerminu = null;
+    }
+
+    @Override
+    public Iterator<Termin> iterator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

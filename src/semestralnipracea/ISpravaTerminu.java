@@ -26,7 +26,7 @@ public interface ISpravaTerminu {
     Boolean jeTerminVolny(LocalDate dStart, LocalDate dEnd,
             LocalTime tStart, LocalTime tEnd);
 
-    Iterator iterator();
+    Iterator<Termin> iterator();
 
     Boolean[][] volneCasy(LocalDate dStart, LocalDate dEnd);
 
