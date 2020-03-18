@@ -30,7 +30,9 @@ public class Termin {
 
     @Override
     public String toString() {
-        return "Termin{" + "idTermin=" + idTermin + ", dStart=" + dStart + ", dEnd=" + dEnd + ", tStart=" + tStart + ", tEnd=" + tEnd + '}';
+        StringBuilder s = new StringBuilder();
+        s.append(idTermin).append(";").append(dStart).append(";").append(dEnd).append(";").append(tStart).append(";").append(tEnd).append(";");
+        return s.toString();
     }
 
 }

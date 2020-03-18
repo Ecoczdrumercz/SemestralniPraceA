@@ -33,12 +33,20 @@ public class SemestralniPraceA {
         list.vlozTermin(termin8); // prida
         list.vlozTermin(termin6); // prida
         list.vlozTermin(termin7); // prida
+        list.uloz();
         
-        
-
-//        for (Termin t : list.getSeznamTerminu()) {
-//            System.out.println(t);
+        list.zrus();
+        if(!list.getSeznamTerminu().jePrazdny())
+//        for (Termin t : list) {
+//            
 //        }
+        list.nacti();
+        
+        for (Termin t : list.getSeznamTerminu()) {
+            System.out.println(t);
+        }
+
+        
         
         StringBuilder s = new StringBuilder();
         Boolean [][] volnecase = list.volneCasy(LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-29"));

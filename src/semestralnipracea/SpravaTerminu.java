@@ -5,6 +5,11 @@
  */
 package semestralnipracea;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -13,6 +18,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 import javafx.util.converter.LocalDateTimeStringConverter;
 
 /**
@@ -70,7 +76,7 @@ public class SpravaTerminu implements ISpravaTerminu {
                     seznamTerminu.vlozPosledni(termin);
                 } else {
                     seznamTerminu.zpristupniPosledni();
-                    seznamTerminu.vlozPredchudce(termin);               
+                    seznamTerminu.vlozPredchudce(termin);
                 }
             }
         } else {
@@ -150,7 +156,7 @@ public class SpravaTerminu implements ISpravaTerminu {
         for (Boolean[] booleans : volny) {
             Arrays.fill(booleans, Boolean.TRUE);
         }
-        
+
         if (seznamTerminu.jePrazdny()) {
             return volny;
         } else {
@@ -158,18 +164,17 @@ public class SpravaTerminu implements ISpravaTerminu {
             Iterator<Termin> iter = seznamTerminu.iterator();
             while (iter.hasNext()) {
                 Termin t = iter.next();
-                System.out.println(t);
-                if (t.dStart.isAfter(dStart) || dStart.isEqual(t.dStart)) {      // je v rozmezi intervalu nebo na pocatku
-                    
+                if (t.dStart.isAfter(dStart) || dStart.isEqual(t.dStart)) {
+
                     int startIndex = (int) ChronoUnit.DAYS.between(dStart, t.dStart);
                     int konec = (int) ChronoUnit.DAYS.between(dStart, dEnd);
                     int indexOdHodin = t.tStart.getHour() - POCET_HODIN;
                     int indexDoHodin = t.tEnd.getHour() - POCET_HODIN;
-                    
-                    if(t.dEnd.isBefore(dEnd)){
-                        konec = (int) ChronoUnit.DAYS.between(dStart, t.dEnd); 
+
+                    if (t.dEnd.isBefore(dEnd)) {
+                        konec = (int) ChronoUnit.DAYS.between(dStart, t.dEnd);
                     }
-                    
+
                     for (int x = startIndex; x < konec; x++) {
                         for (int y = indexOdHodin; y < indexDoHodin; y++) {
                             volny[x][y] = false;
@@ -177,7 +182,7 @@ public class SpravaTerminu implements ISpravaTerminu {
                     }
                 }
             }
-        return volny;
+            return volny;
         }
     }
 
@@ -195,21 +200,81 @@ public class SpravaTerminu implements ISpravaTerminu {
 
     @Override
     public void uloz() {
-        // uloz do souboru
+        try {
+            File myObj = new File("SpravaTerminu.txt");
+            if (myObj.createNewFile()) {
+                FileWriter writer = new FileWriter("SpravaTerminu.txt");
+                Iterator<Termin> iter = seznamTerminu.iterator();
+                while (iter.hasNext()) {
+                    Termin t = iter.next();
+                    writer.write(t.toString() + "\n");
+                }
+                writer.close();
+
+            } else {
+                File file = new File("SpravaTerminu.txt");
+                file.delete();
+                FileWriter writer = new FileWriter("SpravaTerminu.txt");
+                Iterator<Termin> iter = seznamTerminu.iterator();
+                while (iter.hasNext()) {
+                    Termin t = iter.next();
+                    writer.write(t.toString() + "\n");
+                }
+                writer.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error");
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void nacti() {
-        // nacti ze souboru pravdepodobne
+
+        try {
+            File myObj = new File("SpravaTerminu.txt");
+            Scanner myReader = new Scanner(myObj);
+            
+            while (myReader.hasNextLine()) {
+                if(seznamTerminu != null){
+                    String data = myReader.nextLine();
+                    String[]pole = data.split(";");
+                    int id = Integer.valueOf(pole[0]);
+                    LocalDate dStart = LocalDate.parse(pole[1]);
+                    LocalDate dEnd = LocalDate.parse(pole[2]);
+                    LocalTime tStart = LocalTime.parse(pole[3]);
+                    LocalTime tEnd = LocalTime.parse(pole[4]);
+                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd);
+                    seznamTerminu.vlozPrvni(t);
+                }
+                else{
+                    String data = myReader.nextLine();
+                    String[]pole = data.split(";");
+                    int id = Integer.valueOf(pole[0]);
+                    LocalDate dStart = LocalDate.parse(pole[1]);
+                    LocalDate dEnd = LocalDate.parse(pole[2]);
+                    LocalTime tStart = LocalTime.parse(pole[3]);
+                    LocalTime tEnd = LocalTime.parse(pole[4]);
+                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd);
+                    seznamTerminu.vlozPrvni(t);
+                seznamTerminu.vlozNaslednika(t);
+                }
+                
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+@Override
+        public void zrus() {
+        seznamTerminu.zrus();
     }
 
     @Override
-    public void zrus() {
-        seznamTerminu = null;
-    }
-
-    @Override
-    public Iterator<Termin> iterator() {
+        public Iterator<Termin> iterator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
