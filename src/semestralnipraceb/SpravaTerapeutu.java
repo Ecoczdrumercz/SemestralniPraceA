@@ -13,25 +13,25 @@ import java.util.Iterator;
  */
 public class SpravaTerapeutu implements ISpravaTerapeutu {
 
-    AbstrTable<String, Terapeut> list = new AbstrTable<>();
+    AbstrTable<String, Terapeut> strom = new AbstrTable<>();
 
     public SpravaTerapeutu() {
     }
 
     @Override
     public void vlozTerapeuta(Terapeut terapeut) {
-        list.vloz(terapeut.getName(), terapeut);
+        strom.vloz(terapeut.getName(), terapeut);
     }
 
     @Override
     public Terapeut najdi(String klic) {
-        return list.najdi(klic);
+        return strom.najdi(klic);
     }
 
     @Override
     public Terapeut odeber(String klic) {
         try {
-            return list.odeber(klic);
+            return strom.odeber(klic);
         } catch (Exception e) {
             throw new Error(e.toString());
         }
@@ -40,12 +40,12 @@ public class SpravaTerapeutu implements ISpravaTerapeutu {
 
     @Override
     public void zrus() {
-        list.jePrazdny();
+        strom.jePrazdny();
     }
 
     @Override
     public Iterator<Terapeut> VytvorIterator(eTypProhl typ) {
-        return list.vytvorIterator(typ);
+        return strom.vytvorIterator(typ);
     }
 
 }

@@ -20,15 +20,15 @@ public class Termin {
      LocalDate dEnd;
      LocalTime tStart;
      LocalTime tEnd;
-     Terapeut t;
+//     Terapeut t;
 
-    public Termin(int idTermin, LocalDate dStart, LocalDate dEnd, LocalTime tStart, LocalTime tEnd, Terapeut t) {
+    public Termin(int idTermin, LocalDate dStart, LocalDate dEnd, LocalTime tStart, LocalTime tEnd) {
         this.idTermin = idTermin;
         this.dStart = dStart;
         this.dEnd = dEnd;
         this.tStart = tStart;
         this.tEnd = tEnd;
-        this.t = t;
+//        this.t = t;
     }
 
 //    public int getIdTermin() {

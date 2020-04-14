@@ -18,7 +18,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import semestralnipraceb.Terapeut;
 
@@ -189,13 +191,49 @@ public class SpravaTerminu implements ISpravaTerminu {
 
     @Override
     public Termin generujTermin(LocalDate dStart, LocalDate dEnd) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        Random rand = new Random();
+        LocalDateTime localDateTime;
+        
+        LocalDate zacatek = between(dStart, dEnd); // 16.4 -30.4      
+        LocalDate konec = dEnd;
+        LocalTime zacatekCasu;
+        LocalTime KonecCasu;
+
+        if((rand.nextInt((2 - 1) + 1) + 1)==1){
+            zacatekCasu = LocalTime.of((rand.nextInt((14 - 8) + 1) + 8),0);
+            KonecCasu = zacatekCasu.plusHours(4);
+        }
+        else{
+            zacatekCasu = LocalTime.of((rand.nextInt((16 - 8) + 1) + 8),0); 
+            KonecCasu = zacatekCasu.plusHours(2);
+        }
+        
+        Termin termin = new Termin(rand.nextInt(Integer.MAX_VALUE), zacatek, konec, zacatekCasu, KonecCasu);
+        return termin;
+    }
+    
+    public LocalDate between(LocalDate startInclusive, LocalDate endExclusive) {
+    long startEpochDay = startInclusive.toEpochDay();
+    long endEpochDay = endExclusive.toEpochDay();
+    long randomDay = ThreadLocalRandom
+      .current()
+      .nextLong(startEpochDay, endEpochDay);
+ 
+    return LocalDate.ofEpochDay(randomDay);
     }
 
     @Override
     public void generuj(int pocet) {
-        for (int i = 0; i < pocet - 1; i++) {
-            vlozTermin(generujTermin(LocalDate.parse("2020-03-14"), LocalDate.parse("2020-04-14")));
+        int zacatek = seznamTerminu.getPocetPrvku();
+        int pocetKonec = zacatek + pocet;
+        while (pocet < pocetKonec) {
+            LocalDate random = between(LocalDate.now(), LocalDate.now().plusYears(1));
+            Termin termin = generujTermin(random, random.plusMonths(3));
+            if (jeTerminVolny(termin.dStart, termin.dEnd, termin.tStart, termin.tEnd)) {
+                vlozTermin(termin);
+                pocet++;
+            }
         }
     }
 
@@ -235,34 +273,33 @@ public class SpravaTerminu implements ISpravaTerminu {
         try {
             File myObj = new File("SpravaTerminu.txt");
             Scanner myReader = new Scanner(myObj);
-            
+
             while (myReader.hasNextLine()) {
-                if(seznamTerminu != null){
+                if (seznamTerminu != null) {
                     String data = myReader.nextLine();
-                    String[]pole = data.split(";");
+                    String[] pole = data.split(";");
                     int id = Integer.valueOf(pole[0]);
                     LocalDate dStart = LocalDate.parse(pole[1]);
                     LocalDate dEnd = LocalDate.parse(pole[2]);
                     LocalTime tStart = LocalTime.parse(pole[3]);
                     LocalTime tEnd = LocalTime.parse(pole[4]);
-                    Terapeut ter = new Terapeut(2, "aaa", this);
-                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd, ter);
+//                    Terapeut ter = new Terapeut(2, "aaa", this);
+                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd);
                     seznamTerminu.vlozPrvni(t);
-                }
-                else{
+                } else {
                     String data = myReader.nextLine();
-                    String[]pole = data.split(";");
+                    String[] pole = data.split(";");
                     int id = Integer.valueOf(pole[0]);
                     LocalDate dStart = LocalDate.parse(pole[1]);
                     LocalDate dEnd = LocalDate.parse(pole[2]);
                     LocalTime tStart = LocalTime.parse(pole[3]);
                     LocalTime tEnd = LocalTime.parse(pole[4]);
-                    Terapeut ter = new Terapeut(2, "aaa", this);
-                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd, ter);
+//                    Terapeut ter = new Terapeut(2, "aaa", this);
+                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd);
                     seznamTerminu.vlozPrvni(t);
-                seznamTerminu.vlozNaslednika(t);
+                    seznamTerminu.vlozNaslednika(t);
                 }
-                
+
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -271,13 +308,13 @@ public class SpravaTerminu implements ISpravaTerminu {
         }
     }
 
-@Override
-        public void zrus() {
+    @Override
+    public void zrus() {
         seznamTerminu.zrus();
     }
 
     @Override
-        public Iterator<Termin> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Iterator<Termin> iterator() {
+        return seznamTerminu.iterator();
     }
 }

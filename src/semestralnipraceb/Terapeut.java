@@ -45,5 +45,12 @@ public class Terapeut {
         this.name = name;
         this.sprava = sprava;
     }
+
+    @Override
+    public String toString() {
+        return "Terapeut{" + "id=" + id + ", name=" + name + ", sprava=" + sprava + '}';
+    }
+    
+    
     
 }

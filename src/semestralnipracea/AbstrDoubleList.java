@@ -28,6 +28,12 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
         this.pocetPrvku = 0;
     }
 
+    public int getPocetPrvku() {
+        return pocetPrvku;
+    }
+    
+    
+
     private class Prvek<T> {
 
         private Prvek predchudce;

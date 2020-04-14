@@ -17,15 +17,15 @@ public class SemestralniPraceA {
      */
     public static void main(String[] args) {
         SpravaTerminu list = new SpravaTerminu();
-        Terapeut ter = new Terapeut(0, "asdf", list);
-        Termin termin = new Termin(0, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-21"), LocalTime.parse("12:00:00"), LocalTime.parse("14:00:00"),ter);
-        Termin termin2 = new Termin(1, LocalDate.parse("2020-03-20"), LocalDate.parse("2020-03-21"), LocalTime.parse("14:00:00"), LocalTime.parse("16:00:00"),ter);
-        Termin termin3 = new Termin(1, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-21"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"),ter);
-        Termin termin4 = new Termin(1, LocalDate.parse("2020-03-15"), LocalDate.parse("2020-03-21"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"),ter); // neprida se
-        Termin termin5 = new Termin(1, LocalDate.parse("2020-03-23"), LocalDate.parse("2020-03-28"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"),ter);
-        Termin termin6 = new Termin(1, LocalDate.parse("2020-03-22"), LocalDate.parse("2020-03-22"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"),ter);
-        Termin termin7 = new Termin(1, LocalDate.parse("2020-03-22"), LocalDate.parse("2020-03-22"), LocalTime.parse("08:00:00"), LocalTime.parse("10:00:00"),ter);
-        Termin termin8 = new Termin(1, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-22"), LocalTime.parse("08:00:00"), LocalTime.parse("10:00:00"),ter);
+//        Terapeut ter = new Terapeut(0, "asdf", list);
+        Termin termin = new Termin(0, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-21"), LocalTime.parse("12:00:00"), LocalTime.parse("14:00:00"));
+        Termin termin2 = new Termin(1, LocalDate.parse("2020-03-20"), LocalDate.parse("2020-03-21"), LocalTime.parse("14:00:00"), LocalTime.parse("16:00:00"));
+        Termin termin3 = new Termin(1, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-21"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"));
+        Termin termin4 = new Termin(1, LocalDate.parse("2020-03-15"), LocalDate.parse("2020-03-21"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00")); // neprida se
+        Termin termin5 = new Termin(1, LocalDate.parse("2020-03-23"), LocalDate.parse("2020-03-28"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"));
+        Termin termin6 = new Termin(1, LocalDate.parse("2020-03-22"), LocalDate.parse("2020-03-22"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"));
+        Termin termin7 = new Termin(1, LocalDate.parse("2020-03-22"), LocalDate.parse("2020-03-22"), LocalTime.parse("08:00:00"), LocalTime.parse("10:00:00"));
+        Termin termin8 = new Termin(1, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-22"), LocalTime.parse("08:00:00"), LocalTime.parse("10:00:00"));
 //        list.vlozTermin(termin); // prida
 //        list.vlozTermin(termin); // neprida
 //        list.vlozTermin(termin2); // prida
