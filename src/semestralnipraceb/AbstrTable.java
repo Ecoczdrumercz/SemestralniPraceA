@@ -5,13 +5,14 @@
  */
 package semestralnipraceb;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  *
  * @author DanielP
  */
-public class AbstrTable<K extends Comparable<K>, V> implements ITable<K, V> {
+public class AbstrTable<K extends Comparable<K>, V> implements ITable<K, V>,Serializable {
 
     private int velikost;
     private Uzel root;
@@ -21,7 +22,7 @@ public class AbstrTable<K extends Comparable<K>, V> implements ITable<K, V> {
         this.root = null;
     }
 
-    private class Uzel {
+    private class Uzel implements Serializable{
 
         private K key;
         private V data;

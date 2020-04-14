@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,7 +29,7 @@ import semestralnipraceb.Terapeut;
  *
  * @author asdf
  */
-public class SpravaTerminu implements ISpravaTerminu {
+public class SpravaTerminu implements ISpravaTerminu, Serializable {
 
     private AbstrDoubleList<Termin> seznamTerminu;
 

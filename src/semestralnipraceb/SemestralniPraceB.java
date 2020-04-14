@@ -7,8 +7,12 @@ package semestralnipraceb;
 
 import java.io.BufferedReader;
 import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Iterator;
@@ -22,12 +26,39 @@ import semestralnipracea.Termin;
  */
 public class SemestralniPraceB {
 
-    static void uloz() {
+    static SpravaTerapeutu nactiBTS() {
+        SpravaTerapeutu spravaTerapeutu = new SpravaTerapeutu();
+        try {
+            FileInputStream fis = new FileInputStream("spravaTerapeutu");
+            ObjectInputStream ois = new ObjectInputStream(fis);
 
+            spravaTerapeutu = ((SpravaTerapeutu) ois.readObject());
+
+            ois.close();
+            fis.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+            return null;
+        }
+        return spravaTerapeutu;
     }
 
-    static void NactiBTS(String cesta) {
+    static void ulozBTS(SpravaTerapeutu sprava) {
+        SpravaTerapeutu spravaTerapeutu = sprava;
 
+        try {
+            FileOutputStream fos = new FileOutputStream("spravaTerapeutu");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(spravaTerapeutu);
+            oos.close();
+            fos.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
     static void zobraz(Terapeut terapeut) {
@@ -47,10 +78,50 @@ public class SemestralniPraceB {
         Terapeut[] terapeuti = new Terapeut[]{};
         switch (br.readLine()) {
             case "1":
-                terapeuti = new Terapeut[]{};
+
+                terapeuti = new Terapeut[20];
+                int index = 0;
                 while (true) {
-                    return null;
+                    SpravaTerminu terminy = new SpravaTerminu();
+
+                    int id = 0;
+                    String jmeno;
+                    Boolean b = true;
+                    while (b) {
+                        try {
+                            System.out.print("Vloz id terapeuta: \n");
+                            String vstup = br.readLine();
+                            id = Integer.parseInt(vstup);
+                            b = false;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Tohle neni cislo!");
+                        }
+                    }
+
+                    while (true) {
+                        System.out.print("Vloz jmeno terapeuta: \n");
+                        jmeno = br.readLine();
+                        if (jmeno.length() > 0) {
+                            break;
+                        } else {
+                            System.out.println("Zadej aspon jeden znak!");
+                        }
+                    }
+                    terminy.generuj(10);
+                    Terapeut terapeut = new Terapeut(id, jmeno, terminy);
+                    terapeuti[index] = terapeut;
+                    index++;
+                    System.out.println("Pro konec vytvareni terapeuta zadej: exit");
+                    if (br.readLine().equals("exit") || index == 19) {
+                        break;
+                    }
                 }
+                Terapeut[] pomocna = new Terapeut[index];
+                for (int i = 0; i < pomocna.length; i++) {
+                    pomocna[i] = terapeuti[i];
+                    
+                }
+                return pomocna;
 
             case "2":
                 Random rand = new Random();
@@ -79,14 +150,16 @@ public class SemestralniPraceB {
 
         try {
             while (true) {
-                System.out.println("--------------------------------------------------------");
+                System.out.println("--------------------------------------------");
                 System.out.println("Zadej 1 pro: Najdi terapeuta a zobraz");
                 System.out.println("Zadej 2 pro: Vloz noveho terapeuta");
                 System.out.println("Zadej 3 pro: Nacti BVS");
                 System.out.println("Zadej 4 pro: Uloz BVS");
                 System.out.println("Zadej 5 pro: Zobraz strom");
+                System.out.println("Zadej 6 pro: smazání terapeuta");
+                System.out.println("Zadej 7 pro: smazání stromu");
                 System.out.println("Zadej jakýkoliv znak pro: Konec programu");
-                System.out.println("--------------------------------------------------------");
+                System.out.println("--------------------------------------------");
                 boolean exit = false;
 
                 switch (br.readLine()) {
@@ -109,28 +182,29 @@ public class SemestralniPraceB {
 
                         break;
                     case "3":
-
+                        spravaTer = nactiBTS();
                         break;
                     case "4":
-
+                        ulozBTS(spravaTer);
                         break;
 
                     case "5":
-
-                        System.out.println("Zadej 1 pro: zobraz do hloubky");
+                        
+                        try {
+                            System.out.println("Zadej 1 pro: zobraz do hloubky");
                         System.out.println("Zadej 2 pro: zobraz do sirky");
                         System.out.println("Zadej jakýkoliv znak pro: Konec");
                         BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
                         String s = br.readLine();
                         if (s.equals("1")) {
-                            System.out.println("--------------------------------------------------------");
+                            System.out.println("--------------------------------------------");
                             Iterator iter = spravaTer.VytvorIterator(eTypProhl.HLOUBKA);
                             while (iter.hasNext()) {
                                 System.out.println(iter.next());
                             }
 
                         } else if (s.equals("2")) {
-                            System.out.println("--------------------------------------------------------");
+                            System.out.println("--------------------------------------------");
                             Iterator iter = spravaTer.VytvorIterator(eTypProhl.SIRKA);
                             while (iter.hasNext()) {
 
@@ -141,6 +215,22 @@ public class SemestralniPraceB {
                             break;
                         }
                         break;
+                        } catch (Exception e) {
+                            System.out.println(e);
+                            break;
+                        } 
+
+                    case "6": 
+                        System.out.print("Zadej jmeno terapeuta: \n");
+                        BufferedReader br2 = new BufferedReader(new InputStreamReader(System.in));
+                        spravaTer.odeber(br2.readLine());
+                        break;
+
+                    case "7":{
+                            spravaTer.zrus();
+                            break;
+                        }
+                        
                     default:
                         exit = true;
                 }
@@ -152,27 +242,5 @@ public class SemestralniPraceB {
             System.out.println(e);
         }
 
-//        AbstrTable<String, Integer> list = new AbstrTable<>();
-//        for (int i = 1; i < 6; i++) {
-//            System.out.println("vloz");
-//            String key = br.readLine();
-//            list.vloz(key, i);
-//        }
-//
-//        System.out.println(list.najdi("d"));
-//        Iterator<Integer> a = list.vytvorIterator(eTypProhl.SIRKA);
-//
-//        while (a.hasNext()) {
-//
-//            System.out.println(a.next());
-//        }
-//        System.out.println("rip d");
-//        System.out.println(list.odeber("d"));
-//        a = list.vytvorIterator(eTypProhl.SIRKA);
-//
-//        while (a.hasNext()) {
-//
-//            System.out.println(a.next());
-//        }
     }
 }

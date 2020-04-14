@@ -5,6 +5,7 @@
  */
 package semestralnipracea;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
@@ -14,7 +15,7 @@ import java.util.function.Consumer;
  *
  * @author asdf
  */
-public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
+public class AbstrDoubleList<T> implements IAbstrDoubleList<T>, Serializable {
 
     private Prvek<T> prvni;
     private Prvek<T> posledni;
@@ -34,7 +35,7 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
     
     
 
-    private class Prvek<T> {
+    private class Prvek<T> implements Serializable{
 
         private Prvek predchudce;
         private Prvek naslednik;

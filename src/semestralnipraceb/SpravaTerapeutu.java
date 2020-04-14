@@ -5,13 +5,14 @@
  */
 package semestralnipraceb;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  *
  * @author DanielP
  */
-public class SpravaTerapeutu implements ISpravaTerapeutu {
+public class SpravaTerapeutu implements ISpravaTerapeutu, Serializable {
 
     AbstrTable<String, Terapeut> strom = new AbstrTable<>();
 
@@ -40,7 +41,7 @@ public class SpravaTerapeutu implements ISpravaTerapeutu {
 
     @Override
     public void zrus() {
-        strom.jePrazdny();
+        strom.zrus();
     }
 
     @Override

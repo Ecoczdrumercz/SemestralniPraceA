@@ -5,13 +5,14 @@
  */
 package semestralnipraceb;
 
+import java.io.Serializable;
 import semestralnipracea.SpravaTerminu;
 
 /**
  *
  * @author DanielP
  */
-public class Terapeut {
+public class Terapeut implements Serializable{
     private int id;
     private String name;
     private SpravaTerminu sprava;

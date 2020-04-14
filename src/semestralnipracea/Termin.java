@@ -5,6 +5,7 @@
  */
 package semestralnipracea;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import semestralnipraceb.Terapeut;
@@ -13,7 +14,7 @@ import semestralnipraceb.Terapeut;
  *
  * @author DanielP
  */
-public class Termin {
+public class Termin implements Serializable{
 
      int idTermin;
      LocalDate dStart;
