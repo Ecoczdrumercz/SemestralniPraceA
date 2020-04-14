@@ -194,45 +194,46 @@ public class SpravaTerminu implements ISpravaTerminu {
 
         Random rand = new Random();
         LocalDateTime localDateTime;
-        
+
         LocalDate zacatek = between(dStart, dEnd); // 16.4 -30.4      
         LocalDate konec = dEnd;
         LocalTime zacatekCasu;
         LocalTime KonecCasu;
 
-        if((rand.nextInt((2 - 1) + 1) + 1)==1){
-            zacatekCasu = LocalTime.of((rand.nextInt((14 - 8) + 1) + 8),0);
+        if ((rand.nextInt((2 - 1) + 1) + 1) == 1) {
+            zacatekCasu = LocalTime.of((rand.nextInt((14 - 8) + 1) + 8), 0);
             KonecCasu = zacatekCasu.plusHours(4);
-        }
-        else{
-            zacatekCasu = LocalTime.of((rand.nextInt((16 - 8) + 1) + 8),0); 
+        } else {
+            zacatekCasu = LocalTime.of((rand.nextInt((16 - 8) + 1) + 8), 0);
             KonecCasu = zacatekCasu.plusHours(2);
         }
-        
+
         Termin termin = new Termin(rand.nextInt(Integer.MAX_VALUE), zacatek, konec, zacatekCasu, KonecCasu);
         return termin;
     }
-    
+
     public LocalDate between(LocalDate startInclusive, LocalDate endExclusive) {
-    long startEpochDay = startInclusive.toEpochDay();
-    long endEpochDay = endExclusive.toEpochDay();
-    long randomDay = ThreadLocalRandom
-      .current()
-      .nextLong(startEpochDay, endEpochDay);
- 
-    return LocalDate.ofEpochDay(randomDay);
+        long startEpochDay = startInclusive.toEpochDay();
+        long endEpochDay = endExclusive.toEpochDay();
+        long randomDay = ThreadLocalRandom
+                .current()
+                .nextLong(startEpochDay, endEpochDay);
+
+        return LocalDate.ofEpochDay(randomDay);
     }
 
     @Override
     public void generuj(int pocet) {
-        int zacatek = seznamTerminu.getPocetPrvku();
-        int pocetKonec = zacatek + pocet;
-        while (pocet < pocetKonec) {
+
+        int aktualniPocet = seznamTerminu.getPocetPrvku();
+        int pocetKonec = seznamTerminu.getPocetPrvku() + pocet;
+
+        while (aktualniPocet < pocetKonec) {
             LocalDate random = between(LocalDate.now(), LocalDate.now().plusYears(1));
             Termin termin = generujTermin(random, random.plusMonths(3));
             if (jeTerminVolny(termin.dStart, termin.dEnd, termin.tStart, termin.tEnd)) {
                 vlozTermin(termin);
-                pocet++;
+                aktualniPocet++;
             }
         }
     }

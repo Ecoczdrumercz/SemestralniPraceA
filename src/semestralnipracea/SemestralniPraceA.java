@@ -17,15 +17,21 @@ public class SemestralniPraceA {
      */
     public static void main(String[] args) {
         SpravaTerminu list = new SpravaTerminu();
+        list.generuj(10);
+        Iterator iter = list.iterator();
+        while(iter.hasNext()){
+            System.out.println(iter.next());
+        }
+        
 //        Terapeut ter = new Terapeut(0, "asdf", list);
-        Termin termin = new Termin(0, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-21"), LocalTime.parse("12:00:00"), LocalTime.parse("14:00:00"));
-        Termin termin2 = new Termin(1, LocalDate.parse("2020-03-20"), LocalDate.parse("2020-03-21"), LocalTime.parse("14:00:00"), LocalTime.parse("16:00:00"));
-        Termin termin3 = new Termin(1, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-21"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"));
-        Termin termin4 = new Termin(1, LocalDate.parse("2020-03-15"), LocalDate.parse("2020-03-21"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00")); // neprida se
-        Termin termin5 = new Termin(1, LocalDate.parse("2020-03-23"), LocalDate.parse("2020-03-28"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"));
-        Termin termin6 = new Termin(1, LocalDate.parse("2020-03-22"), LocalDate.parse("2020-03-22"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"));
-        Termin termin7 = new Termin(1, LocalDate.parse("2020-03-22"), LocalDate.parse("2020-03-22"), LocalTime.parse("08:00:00"), LocalTime.parse("10:00:00"));
-        Termin termin8 = new Termin(1, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-22"), LocalTime.parse("08:00:00"), LocalTime.parse("10:00:00"));
+//        Termin termin = new Termin(0, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-21"), LocalTime.parse("12:00:00"), LocalTime.parse("14:00:00"));
+//        Termin termin2 = new Termin(1, LocalDate.parse("2020-03-20"), LocalDate.parse("2020-03-21"), LocalTime.parse("14:00:00"), LocalTime.parse("16:00:00"));
+//        Termin termin3 = new Termin(1, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-21"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"));
+//        Termin termin4 = new Termin(1, LocalDate.parse("2020-03-15"), LocalDate.parse("2020-03-21"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00")); // neprida se
+//        Termin termin5 = new Termin(1, LocalDate.parse("2020-03-23"), LocalDate.parse("2020-03-28"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"));
+//        Termin termin6 = new Termin(1, LocalDate.parse("2020-03-22"), LocalDate.parse("2020-03-22"), LocalTime.parse("10:00:00"), LocalTime.parse("12:00:00"));
+//        Termin termin7 = new Termin(1, LocalDate.parse("2020-03-22"), LocalDate.parse("2020-03-22"), LocalTime.parse("08:00:00"), LocalTime.parse("10:00:00"));
+//        Termin termin8 = new Termin(1, LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-22"), LocalTime.parse("08:00:00"), LocalTime.parse("10:00:00"));
 //        list.vlozTermin(termin); // prida
 //        list.vlozTermin(termin); // neprida
 //        list.vlozTermin(termin2); // prida
@@ -37,29 +43,29 @@ public class SemestralniPraceA {
 //        list.vlozTermin(termin7); // prida
         //list.uloz();
         
-        list.zrus();
+//        list.zrus();
 //        if(!list.getSeznamTerminu().jePrazdny())
 //        for (Termin t : list) {
 //            
 //        }
-        list.nacti();
-        
-        for (Termin t : list.getSeznamTerminu()) {
-            System.out.println(t);
-        }
-
-        
-        
-        StringBuilder s = new StringBuilder();
-        Boolean [][] volnecase = list.volneCasy(LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-29"));
-        
-        for (int i = 0; i < volnecase.length-1; i++) {
-            for (int j = 0; j < volnecase[i].length; j++) {
-                s.append(volnecase[i][j]).append(" | ");
-            }
-            s.append(i+1).append("\n");
-        }
-        System.out.println(s);
+//        list.nacti();
+//        
+//        for (Termin t : list.getSeznamTerminu()) {
+//            System.out.println(t);
+//        }
+//
+//        
+//        
+//        StringBuilder s = new StringBuilder();
+//        Boolean [][] volnecase = list.volneCasy(LocalDate.parse("2020-03-14"), LocalDate.parse("2020-03-29"));
+//        
+//        for (int i = 0; i < volnecase.length-1; i++) {
+//            for (int j = 0; j < volnecase[i].length; j++) {
+//                s.append(volnecase[i][j]).append(" | ");
+//            }
+//            s.append(i+1).append("\n");
+//        }
+//        System.out.println(s);
+//    }
     }
-
 }
