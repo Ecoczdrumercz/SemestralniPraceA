@@ -194,29 +194,39 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T> {
 
     @Override
     public T odeberPrvni() {
-        if (aktualni == null) {
+        if (jePrazdny()) {
             throw new NullPointerException();
         } else {
-            T data = aktualni.zaznam;
-            aktualni.naslednik.predchudce = aktualni.predchudce;
-            aktualni = null;
-            pocetPrvku--;
-            return data;
+             T data = prvni.zaznam;
+        if (prvni == aktualni) {
+            if (prvni.naslednik != null) {
+                aktualni = prvni.naslednik;
+            }
+        }
+        prvni = prvni.naslednik;
+        pocetPrvku--;
+        return data;
         }
     }
 
     @Override
     public T odeberPosledni() {
-        if (aktualni == null) {
+        if (jePrazdny()) {
             throw new NullPointerException();
         } else {
-            T data = aktualni.zaznam;
-            aktualni.predchudce.naslednik = aktualni.naslednik;
-            aktualni = null;
-            pocetPrvku--;
-            return data;
+             T data = posledni.zaznam;
+
+        if (posledni == aktualni) {
+            if (posledni.predchudce != null) {
+                aktualni = posledni.predchudce;
+            }
         }
+        posledni = posledni.predchudce;
+        pocetPrvku--;
+        return data;
     }
+        }
+    
 
     @Override
     public T odeberNaslednika() {

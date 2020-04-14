@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import semestralnipraceb.Terapeut;
 
 /**
  *
@@ -244,7 +245,8 @@ public class SpravaTerminu implements ISpravaTerminu {
                     LocalDate dEnd = LocalDate.parse(pole[2]);
                     LocalTime tStart = LocalTime.parse(pole[3]);
                     LocalTime tEnd = LocalTime.parse(pole[4]);
-                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd);
+                    Terapeut ter = new Terapeut(2, "aaa", this);
+                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd, ter);
                     seznamTerminu.vlozPrvni(t);
                 }
                 else{
@@ -255,7 +257,8 @@ public class SpravaTerminu implements ISpravaTerminu {
                     LocalDate dEnd = LocalDate.parse(pole[2]);
                     LocalTime tStart = LocalTime.parse(pole[3]);
                     LocalTime tEnd = LocalTime.parse(pole[4]);
-                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd);
+                    Terapeut ter = new Terapeut(2, "aaa", this);
+                    Termin t = new Termin(id, dStart, dEnd, tStart, tEnd, ter);
                     seznamTerminu.vlozPrvni(t);
                 seznamTerminu.vlozNaslednika(t);
                 }

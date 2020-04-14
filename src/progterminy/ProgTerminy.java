@@ -239,8 +239,8 @@ public class ProgTerminy extends javax.swing.JFrame {
         LocalTime tStart= LocalTime.parse("08:00:00");
         LocalTime tEnd= LocalTime.parse("08:00:00");
         
-        Termin t = new Termin(id, dStart, dEnd, tStart, tEnd);
-        list.vlozTermin(t);
+      //  Termin t = new Termin(id, dStart, dEnd, tStart, tEnd);
+     //   list.vlozTermin(t);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
