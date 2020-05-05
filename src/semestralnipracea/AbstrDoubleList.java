@@ -32,6 +32,30 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T>, Serializable {
     public int getPocetPrvku() {
         return pocetPrvku;
     }
+
+    public Prvek<T> getPrvni() {
+        return prvni;
+    }
+
+    public void setPrvni(Prvek<T> prvni) {
+        this.prvni = prvni;
+    }
+
+    public Prvek<T> getPosledni() {
+        return posledni;
+    }
+
+    public void setPosledni(Prvek<T> posledni) {
+        this.posledni = posledni;
+    }
+
+    public Prvek<T> getAktualni() {
+        return aktualni;
+    }
+
+    public void setAktualni(Prvek<T> aktualni) {
+        this.aktualni = aktualni;
+    }
     
     
 
@@ -67,7 +91,7 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T>, Serializable {
             Prvek<T> prvek = new Prvek<>(null, null, data);
             prvni = prvek;
             posledni = prvek;
-          //  aktualni = prvek;
+            aktualni = prvek;
             pocetPrvku++;
         } else {
             Prvek<T> prvek = new Prvek<>(null, prvni, data);
@@ -83,7 +107,7 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T>, Serializable {
             Prvek<T> prvek = new Prvek<>(null, null, data);
             posledni = prvek;
             prvni = prvek;
-          //  aktualni = prvek;
+            aktualni = prvek;
             pocetPrvku++;
         } else {
             Prvek<T> prvek = new Prvek<>(posledni, null, data);
@@ -228,7 +252,10 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T>, Serializable {
                 aktualni = posledni.predchudce;
             }
         }
+        
+        posledni.predchudce.naslednik = null;
         posledni = posledni.predchudce;
+        
         pocetPrvku--;
         return data;
     }
@@ -279,12 +306,12 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T>, Serializable {
 
     @Override
     public Iterator<T> iterator()
-    {
+    { 
+        aktualni = null;
         return new Iterator<T>()
+                
         {
             Prvek<T> i = prvni;
-            Prvek<T> predchoziI = null;
-            Prvek<T> aktualniI = null;
 
             @Override
             public boolean hasNext()
@@ -295,11 +322,11 @@ public class AbstrDoubleList<T> implements IAbstrDoubleList<T>, Serializable {
             @Override
             public T next()
             {
+                
                 if (hasNext())
                 {
                     T data = i.zaznam;
-                    predchoziI = aktualniI;
-                    aktualniI = i;
+                    setAktualni(i);
                     i = i.naslednik;
                     return data;
                 }
