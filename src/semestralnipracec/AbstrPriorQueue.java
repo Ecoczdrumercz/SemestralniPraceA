@@ -40,14 +40,14 @@ public class AbstrPriorQueue<K extends Comparable<K>, V> implements IAbstrPriorQ
         
 
         @Override
-        public String toString() {
-            return "P{" + "data=" + data + '}';
+        public String toString() {                                              // vypise data, ktere jsou ulozena pres to string. Zavola se pak na datovy typ na zaklade genericity.
+            return "" + data + ' ';                                             // pokud data budou datoveho typu Mereni, tak se zavola toString tridy mereni, atd...
         }
 
     }
 
     @Override
-    public boolean jePrazdny() {
+    public boolean jePrazdny() {                                                // vrati boolean na zaklade semestralky A, pokud je utrideny seznam prazdny nebo neni.
         return Useznam.jePrazdny();
     }
 
@@ -55,14 +55,14 @@ public class AbstrPriorQueue<K extends Comparable<K>, V> implements IAbstrPriorQ
     public Boolean vloz(K key, V value) {
         if (key != null || value != null) {
             Prvek prvek = new Prvek(value, key);
-            if (jePrazdny()) {                                                  // operace Vloz a
+            if (jePrazdny()) {                                                  // operace Vloz A, pokud neni zadny prvek v utridenem listu, vlozim ho na prvni misto utrideneho listu
                 Useznam.vlozPrvni(prvek);
                 mez = key;
                 return true;
             } else {
-                if (Useznam.getPocetPrvku() == MAX_POCET) {
-
-                    if (key.compareTo(mez) < 1) {
+                if (Useznam.getPocetPrvku() == MAX_POCET) {                     // operace Vloz B nebo C. Pokud je utrideny seznam naplnen, musim podle priority porovnat jestli prvek vlozim.
+                                                                                // pokud priorita vkladaneho prvku vetsi, tak vlozim do utrideneho seznamu a posledni prvek vlozim do neutrideneho seznamu.
+                    if (key.compareTo(mez) < 1) {                               // pokud neni, tak prvek vlozim do neutrideneho seznamu
                         if (Nseznam.jePrazdny()) {
                             Nseznam.vlozPrvni(prvek);
                         } else {
@@ -120,13 +120,13 @@ public class AbstrPriorQueue<K extends Comparable<K>, V> implements IAbstrPriorQ
     }
 
     @Override
-    public void zrus() {
+    public void zrus() {                                                        // inicializuji znovu N a USeznam
         Nseznam = new AbstrDoubleList<>();
         Useznam = new AbstrDoubleList<>();
     }
 
-    public void naplFrontu() {
-        
+    public void naplFrontu() {                                                  // plnim UFrontu pres metodu vloz, ktera se mi stara o vsechnu logiku. Zde mam lokalni promenou, 
+                                                                                // ktera si na zacatku ponecha velikost NSeznamu prvku a projede se mi cela fronta N.
         int pocet = Nseznam.getPocetPrvku();
             for (int i = 0; i < pocet; i++) {
                 Prvek p = Nseznam.odeberPrvni();
@@ -136,7 +136,7 @@ public class AbstrPriorQueue<K extends Comparable<K>, V> implements IAbstrPriorQ
     }
 
     @Override
-    public V odeberMax() {
+    public V odeberMax() {                                                      // odebere mi prvni prvek z UFronty, pokud je v UFronte mene, jak 1 prvek, tak mi funkce naplFrontu naplni Ufrontu
         if (!Useznam.jePrazdny()) {
             if (Useznam.getPocetPrvku() > 1) {
                 return Useznam.odeberPrvni().data;
@@ -153,7 +153,7 @@ public class AbstrPriorQueue<K extends Comparable<K>, V> implements IAbstrPriorQ
     }
 
     @Override
-    public V zpristupni() {
+    public V zpristupni() {                                                     // zpristupni mi prvni prioritu z UFronty
         if (!Useznam.jePrazdny()) {
             return Useznam.zpristupniPrvni().data;
         } else {
@@ -167,9 +167,9 @@ public class AbstrPriorQueue<K extends Comparable<K>, V> implements IAbstrPriorQ
     }
 
     @Override
-    public void vybuduj(V[] values, K[] keys) {
-        V[] datas = values;
-        K[] priority = keys;
+    public void vybuduj(V[] values, K[] keys) {                                 // vybuduje mi hodnoty na zaklade pole dat
+        V[] datas = values;                                                     // tuto metodu nevyuzivam a pouzivam metodu generujButton v gui
+        K[] priority = keys;                                                    
 
         for (int i = 0; i < datas.length; i++) {
             vloz(priority[i], datas[i]);

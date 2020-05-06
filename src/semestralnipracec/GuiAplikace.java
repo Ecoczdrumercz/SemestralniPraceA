@@ -5,6 +5,10 @@
  */
 package semestralnipracec;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -13,6 +17,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Scanner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
@@ -74,6 +79,8 @@ public class GuiAplikace extends javax.swing.JFrame {
         jSpinnerOd = new javax.swing.JSpinner();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        generujButton = new javax.swing.JButton();
+        ulozButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -81,14 +88,17 @@ public class GuiAplikace extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
+        jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
         jScrollPane2.setViewportView(jTextArea2);
 
+        jTextArea3.setEditable(false);
         jTextArea3.setColumns(20);
         jTextArea3.setRows(5);
         jScrollPane3.setViewportView(jTextArea3);
@@ -204,6 +214,20 @@ public class GuiAplikace extends javax.swing.JFrame {
 
         jLabel9.setText("Datum mereni do");
 
+        generujButton.setText("generuj");
+        generujButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generujButtonActionPerformed(evt);
+            }
+        });
+
+        ulozButton.setText("uloz");
+        ulozButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ulozButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -211,40 +235,47 @@ public class GuiAplikace extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(vlozButton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(45, 45, 45)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel6)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(nactiButton, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(vlozButton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(zrusButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(iteratorButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(odeberButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(clearButton))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jSpinnerOd, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8))
+                                .addGap(59, 59, 59)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jXDatePicker3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jSpinnerDo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jSpinner1, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(45, 45, 45)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(nactiButton, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(zrusButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(iteratorButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(odeberButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearButton))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerOd, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8))
-                        .addGap(59, 59, 59)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jXDatePicker3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerDo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(generujButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ulozButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,11 +284,11 @@ public class GuiAplikace extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(66, 66, 66)
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel7))
@@ -282,6 +313,10 @@ public class GuiAplikace extends javax.swing.JFrame {
                 .addGap(43, 43, 43)
                 .addComponent(nactiButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(generujButton)
+                    .addComponent(ulozButton))
+                .addGap(55, 55, 55)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(zrusButton)
                     .addComponent(iteratorButton)
@@ -337,16 +372,12 @@ public class GuiAplikace extends javax.swing.JFrame {
 
     private void vlozButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vlozButtonActionPerformed
         try {
-//              LocalDate datePart = LocalDate.parse("2013-01-02");
-//              LocalTime timePart = LocalTime.parse("04:05:06");
-//              LocalDateTime dt = LocalDateTime.of(datePart, timePart);
 
             Double m3 = Double.parseDouble(jTextField1.getText());              // pokus o parsovani, protoze jtextfield nemusi zaznamenat zmenu, pokud uzivatel nezmackne enter
 
             if (jXDatePicker1.getDate() != null && jSpinner1.getValue() != null) {
 
-                String pattern = "dd-MM-yyyy";
-                //    String pattern = "HH-mm-yyyy";
+                String pattern = "yyyy-MM-dd";
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
                 String dateString = simpleDateFormat.format(jXDatePicker1.getDate());
                 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(pattern);
@@ -379,6 +410,7 @@ public class GuiAplikace extends javax.swing.JFrame {
         prioritniFronta.zrus();
         jTextArea1.append("Prioritni fronta byla zrusena.\n");
         clearTextAreas();
+        pocet = 0;
     }//GEN-LAST:event_zrusButtonActionPerformed
 
     private void odeberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_odeberButtonActionPerformed
@@ -402,24 +434,23 @@ public class GuiAplikace extends javax.swing.JFrame {
         try {
             clearTextAreas();
             if (!prioritniFronta.jePrazdny()) {
-            Iterator it = prioritniFronta.iterator();
-            Iterator nesetridenyIt = prioritniFronta.vytvorIterator();
+                Iterator it = prioritniFronta.iterator();
+                Iterator nesetridenyIt = prioritniFronta.vytvorIterator();
 
-            while (it.hasNext()) {
+                while (it.hasNext()) {
 
-                jTextArea2.append(it.next().toString() + "\n");
+                    jTextArea2.append(it.next().toString() + "\n");
+                }
+                while (nesetridenyIt.hasNext()) {
+
+                    jTextArea3.append(nesetridenyIt.next().toString() + "\n");
+                }
             }
-            while (nesetridenyIt.hasNext()) {
-
-                jTextArea3.append(nesetridenyIt.next().toString() + "\n");
-            }
-        }
         } catch (Exception e) {
             jTextArea1.append("Nejsou zadne data \n");
         }
-        
-        
-        
+
+
     }//GEN-LAST:event_iteratorButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
@@ -428,7 +459,7 @@ public class GuiAplikace extends javax.swing.JFrame {
 
     private void jXDatePicker2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker2ActionPerformed
         // pokud datum bude menší, jak datum od, tak nastaví na datum od
-            // pokud datum bude větší, jak datum do, tak nastaví na datum do
+        // pokud datum bude větší, jak datum do, tak nastaví na datum do
     }//GEN-LAST:event_jXDatePicker2ActionPerformed
 
     private void jXDatePicker3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker3ActionPerformed
@@ -440,15 +471,156 @@ public class GuiAplikace extends javax.swing.JFrame {
     }//GEN-LAST:event_jSpinnerOdPropertyChange
 
     private void nactiButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nactiButtonActionPerformed
-        // TODO add your handling code here:
+
+try {
+            File file = new File("data.csv");
+            Scanner scanner = new Scanner(file);
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            while (scanner.hasNextLine()) {
+
+
+                String data = scanner.nextLine();
+                String[] pole = data.split(";");
+                LocalDateTime dateTime = LocalDateTime.parse(pole[2],dateFormat);
+
+                int mereni_id = Integer.parseInt(pole[0]);
+                int senzor_id = Integer.parseInt(pole[1]);
+                double m3 = Double.parseDouble(pole[3]);
+
+                Mereni m = new Mereni(mereni_id, senzor_id, dateTime, m3);
+
+                prioritniFronta.vloz(m.getM3(),m);
+
+
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+
+//        try {
+//            File file = new File("data.csv");
+//            Scanner scanner = new Scanner(file);
+//                
+////                String pattern = "dd.MM.yyyy HH:mm:ss";
+////                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+////                String dateString = simpleDateFormat.format(jXDatePicker1.getDate());
+//                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+////                LocalTime time = LocalTime.of((int) jSpinner3.getValue(), 0, 0);
+////                LocalDate date = LocalDate.parse(dateString, dateFormat);
+////
+////                LocalDateTime odDate = LocalDateTime.of(date, time);
+////                LocalDateTime doDate = LocalDateTime.of(date, time);
+////                
+////            int compareDate = jXDatePicker2.getDate().compareTo(jXDatePicker3.getDate());
+////                switch (compareDate) {
+////                    case 0:
+////                        int compareTime = LocalTime.of((int) jSpinnerOd.getValue(), 0, 0).compareTo(LocalTime.of((int) jSpinnerDo.getValue(), 0, 0));
+////                        switch (compareTime) {
+////                            case 1:
+////                                if ()
+////                                
+////                                    break;
+////                            case 0:
+////                                break;
+////                            default:
+////                                break;
+////                        }
+////                        break;
+////                    case 1:
+////                        break;
+////                    default:
+////                        break;
+////                }
+//            
+//            
+//            while (scanner.hasNextLine()) {
+//
+//                String data = scanner.nextLine();
+//                String[] pole = data.split(";");
+//
+//                LocalDateTime dateTime = LocalDateTime.parse(pole[2], dateFormat);
+//                
+////                String s = pole[2];
+////                String[] times =  s.split(" ");
+////                LocalDate ld =  LocalDate.parse(times[0], dateFormat);
+////                LocalTime lt = LocalTime.parse(times[0], dateFormat);
+//
+//                // pokud kalendar ma stejne datum, tak musim jeste zjistit, ktery mensi nebo vetsi hodinu
+//                // abych mohl dale urcit, ktery datum bude pred a po
+//                
+//
+//                int mereni_id = Integer.parseInt(pole[0]);
+//                int senzor_id = Integer.parseInt(pole[1]);
+//                double m3 = Double.parseDouble(pole[3]);
+//
+//                Mereni m = new Mereni(mereni_id, senzor_id, dateTime, m3);
+//
+//                prioritniFronta.vloz(m.getM3(), m);
+//
+//            }
+//            jTextArea1.append("Uspesne nactene prvky ze souboru\n");
+//            scanner.close();
+//        } catch (FileNotFoundException e) {
+//            System.out.println("Error");
+//            e.printStackTrace();
+//        }
     }//GEN-LAST:event_nactiButtonActionPerformed
 
-    private void clearTextAreas(){
+    private void generujButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generujButtonActionPerformed
+        for (int i = 0; i < 10; i++) {                                          // metoda která vygeneruje nahodne mereni a vlozi je do PF
+            int randCislo = (int) (Math.random() * 100) + 0;                    // vytvori nahodny id_senzor
+            long randDatum = (long) (Math.random() * 100000) + (-100000);       // vytvori nahodne cislo, ktere se odecte od dnesniho data v systemu
+            Mereni value = new Mereni(pocet, randCislo, LocalDateTime.now() // vytvoreni noveho mereni
+                    .plusSeconds(randDatum), (Math.random() * 100) + 0);
+            prioritniFronta.vloz(value.getM3(), value);
+            pocet++;
+            jTextArea1.append("Uspesne vlozeny prvek \n");
+        }
+    }//GEN-LAST:event_generujButtonActionPerformed
+
+    private void ulozButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ulozButtonActionPerformed
+        try {
+            File myObj = new File("data.csv");
+            if (myObj.createNewFile()) {
+                FileWriter writer = new FileWriter("data.csv");
+                Iterator itSetrideny = prioritniFronta.iterator();
+                Iterator itNesetrideny = prioritniFronta.vytvorIterator();
+                while (itSetrideny.hasNext()) {
+                    writer.write(itSetrideny.next().toString() + "\n");
+                }
+                while (itNesetrideny.hasNext()) {
+                    writer.write(itNesetrideny.next().toString() + "\n");
+                }
+                writer.close();
+
+            } else {
+                File file = new File("data.csv");
+                file.delete();
+                FileWriter writer = new FileWriter("data.csv");
+                Iterator itSetrideny = prioritniFronta.iterator();
+                Iterator itNesetrideny = prioritniFronta.vytvorIterator();
+                while (itSetrideny.hasNext()) {
+                    writer.write(itSetrideny.next().toString() + "\n");
+                }
+                while (itNesetrideny.hasNext()) {
+                    writer.write(itNesetrideny.next().toString() + "\n");
+                }
+                writer.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_ulozButtonActionPerformed
+
+    private void clearTextAreas() {
         jTextArea2.setText("");
         jTextArea3.setText("");
     }
-    
-    
+
     /**
      * @param args the command line arguments
      */
@@ -486,6 +658,7 @@ public class GuiAplikace extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearButton;
+    private javax.swing.JButton generujButton;
     private javax.swing.JButton iteratorButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -514,6 +687,7 @@ public class GuiAplikace extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXDatePicker jXDatePicker3;
     private javax.swing.JButton nactiButton;
     private javax.swing.JButton odeberButton;
+    private javax.swing.JButton ulozButton;
     private javax.swing.JButton vlozButton;
     private javax.swing.JButton zrusButton;
     // End of variables declaration//GEN-END:variables

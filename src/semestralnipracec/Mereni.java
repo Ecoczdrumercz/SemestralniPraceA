@@ -6,7 +6,7 @@
 package semestralnipracec;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -58,8 +58,8 @@ public class Mereni {
     }
 
     @Override
-    public String toString() {
-        return "{" + "id=" + id + ", sensor_id=" + sensor_id + ", time=" + time + ", m3=" + m3 + '}';
+    public String toString() {                                                  // zmena formatu aby se vubec nacetli data ze souboru, ktery byl predan od vyucujiciho
+        return "" + "" + id + ";" + sensor_id + ";" + time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + ";" + m3 + ';';
     }
     
     
