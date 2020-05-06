@@ -432,7 +432,7 @@ public class GuiAplikace extends javax.swing.JFrame {
     private void iteratorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iteratorButtonActionPerformed
 
         try {
-            clearTextAreas();
+            clearTextAreas();                                                   // vytvori a vypise iterator do jtextArea2 a jtextArea3 (PF utridena a neutridena)
             if (!prioritniFronta.jePrazdny()) {
                 Iterator it = prioritniFronta.iterator();
                 Iterator nesetridenyIt = prioritniFronta.vytvorIterator();
@@ -458,8 +458,7 @@ public class GuiAplikace extends javax.swing.JFrame {
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void jXDatePicker2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker2ActionPerformed
-        // pokud datum bude menší, jak datum od, tak nastaví na datum od
-        // pokud datum bude větší, jak datum do, tak nastaví na datum do
+
     }//GEN-LAST:event_jXDatePicker2ActionPerformed
 
     private void jXDatePicker3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker3ActionPerformed
@@ -472,101 +471,54 @@ public class GuiAplikace extends javax.swing.JFrame {
 
     private void nactiButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nactiButtonActionPerformed
 
-try {
-            File file = new File("data.csv");
-            Scanner scanner = new Scanner(file);
-            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (jXDatePicker2.getDate() != null && jXDatePicker3.getDate() != null) {   // zkontroluje jestli date picker je null, pokud je, tak se nic nenacte
+            try {
+                File file = new File("data.csv");
+                Scanner scanner = new Scanner(file);
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String pattern = "yyyy-MM-dd";
+                DateTimeFormatter dateFormat1 = DateTimeFormatter.ofPattern(pattern);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-            while (scanner.hasNextLine()) {
+                LocalDate dateOd = LocalDate.parse(simpleDateFormat.format(jXDatePicker2.getDate()), dateFormat1);
+                LocalDate dateDo = LocalDate.parse(simpleDateFormat.format(jXDatePicker3.getDate()), dateFormat1);
+                LocalDateTime timeOd = LocalDateTime.of(dateOd, LocalTime.of((int) jSpinnerOd.getValue(), 0, 0));
+                LocalDateTime timeDo = LocalDateTime.of(dateDo, LocalTime.of((int) jSpinnerDo.getValue(), 0, 0));
+                
+                if(timeOd.isBefore(timeDo)|| timeOd.isEqual(timeDo)){                                                   // kontrola datumuOd, jestli je poDatumu nebo rovno poDatumu
+                    while (scanner.hasNextLine()) {
+                        
+                    String data = scanner.nextLine();
+                    String[] pole = data.split(";");
+                    
+                    LocalDateTime dateTime = LocalDateTime.parse(pole[2], dateFormat);
 
+                    if(dateTime.isAfter(timeOd)||dateTime.isEqual(timeOd) && dateTime.isBefore(timeDo)||dateTime.isEqual(timeDo)){    // kontrola LocalDateTimu jestli je v mezi nebo rovno mezi.
+                        int mereni_id = Integer.parseInt(pole[0]);
+                    int senzor_id = Integer.parseInt(pole[1]);
+                    double m3 = Double.parseDouble(pole[3]);
 
-                String data = scanner.nextLine();
-                String[] pole = data.split(";");
-                LocalDateTime dateTime = LocalDateTime.parse(pole[2],dateFormat);
+                    Mereni m = new Mereni(mereni_id, senzor_id, dateTime, m3);
 
-                int mereni_id = Integer.parseInt(pole[0]);
-                int senzor_id = Integer.parseInt(pole[1]);
-                double m3 = Double.parseDouble(pole[3]);
+                    prioritniFronta.vloz(m.getM3(), m);
+                    pocet++;                                                       // pri kazdem uspesnem vlozeni, se mi nacita pocet (counter), ktery pak funguje pro generovani unikatních ID v generatoru
+                    }
 
-                Mereni m = new Mereni(mereni_id, senzor_id, dateTime, m3);
+                }
+                scanner.close();
+                }
+                else{
+                    scanner.close();
+                }
 
-                prioritniFronta.vloz(m.getM3(),m);
-
-
+                
+            } catch (FileNotFoundException e) {
+                System.out.println("Error");
+                e.printStackTrace();
             }
-            scanner.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Error");
-            e.printStackTrace();
         }
 
-//        try {
-//            File file = new File("data.csv");
-//            Scanner scanner = new Scanner(file);
-//                
-////                String pattern = "dd.MM.yyyy HH:mm:ss";
-////                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-////                String dateString = simpleDateFormat.format(jXDatePicker1.getDate());
-//                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-////                LocalTime time = LocalTime.of((int) jSpinner3.getValue(), 0, 0);
-////                LocalDate date = LocalDate.parse(dateString, dateFormat);
-////
-////                LocalDateTime odDate = LocalDateTime.of(date, time);
-////                LocalDateTime doDate = LocalDateTime.of(date, time);
-////                
-////            int compareDate = jXDatePicker2.getDate().compareTo(jXDatePicker3.getDate());
-////                switch (compareDate) {
-////                    case 0:
-////                        int compareTime = LocalTime.of((int) jSpinnerOd.getValue(), 0, 0).compareTo(LocalTime.of((int) jSpinnerDo.getValue(), 0, 0));
-////                        switch (compareTime) {
-////                            case 1:
-////                                if ()
-////                                
-////                                    break;
-////                            case 0:
-////                                break;
-////                            default:
-////                                break;
-////                        }
-////                        break;
-////                    case 1:
-////                        break;
-////                    default:
-////                        break;
-////                }
-//            
-//            
-//            while (scanner.hasNextLine()) {
-//
-//                String data = scanner.nextLine();
-//                String[] pole = data.split(";");
-//
-//                LocalDateTime dateTime = LocalDateTime.parse(pole[2], dateFormat);
-//                
-////                String s = pole[2];
-////                String[] times =  s.split(" ");
-////                LocalDate ld =  LocalDate.parse(times[0], dateFormat);
-////                LocalTime lt = LocalTime.parse(times[0], dateFormat);
-//
-//                // pokud kalendar ma stejne datum, tak musim jeste zjistit, ktery mensi nebo vetsi hodinu
-//                // abych mohl dale urcit, ktery datum bude pred a po
-//                
-//
-//                int mereni_id = Integer.parseInt(pole[0]);
-//                int senzor_id = Integer.parseInt(pole[1]);
-//                double m3 = Double.parseDouble(pole[3]);
-//
-//                Mereni m = new Mereni(mereni_id, senzor_id, dateTime, m3);
-//
-//                prioritniFronta.vloz(m.getM3(), m);
-//
-//            }
-//            jTextArea1.append("Uspesne nactene prvky ze souboru\n");
-//            scanner.close();
-//        } catch (FileNotFoundException e) {
-//            System.out.println("Error");
-//            e.printStackTrace();
-//        }
+
     }//GEN-LAST:event_nactiButtonActionPerformed
 
     private void generujButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generujButtonActionPerformed
